@@ -1,0 +1,108 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+.nav-link{
+  margin-left: 40px;
+}
+
+#supportHero{
+  background-color: rgb(56, 126, 209);
+  color: white;
+}
+
+#supportHero a{
+  color: white;
+}
+
+#supportWrapper{
+  display: flex;
+  justify-content: space-between;
+  margin: 0 150px;
+}
+
+#supportHero input{
+  padding: 20px 50px;
+  width: 100%;
+  font-size: 20px;
+  border-radius: 10px;
+  border: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* product page css*/
+
+.product-section {
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.product-image {
+  width: 85%;
+  max-width: 500px;
+  height: auto;
+}
+
+.product-content {
+  padding: 30px 50px;
+}
+
+.product-content h2 {
+  font-size: 32px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #424242;
+}
+
+.product-content p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: #555;
+  max-width: 500px;
+}
+
+.product-links {
+  margin-top: 25px;
+}
+
+.product-links a {
+  margin-right: 30px;
+  color: #387ed1;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.app-badges {
+  margin-top: 25px;
+}
+
+.app-badges img {
+  width: 130px;
+  height: auto;
+  margin-right: 20px;
+}
