@@ -1,5 +1,3 @@
-
-
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 
@@ -16,26 +14,18 @@ const BuyActionWindow = ({ uid }) => {
   const { closeBuyWindow } = useContext(GeneralContext);
 
   const handleBuyClick = () => {
-    // axios.post("http://localhost:3002/newOrder", {
-    //   name: uid,
-    //   qty: stockQuantity,
-    //   price: stockPrice,
-    //   mode: "BUY",
-    // });
-
-
-     axios.post(
-  "http://localhost:3002/newOrder",
-  {
-    name: uid,
-    qty: stockQuantity,
-    price: stockPrice,
-    mode: "BUY",
-  },
-  {
-    withCredentials: true,
-  }
-);
+    axios.post(
+      "http://localhost:3002/newOrder",
+      {
+        name: uid,
+        qty: stockQuantity,
+        price: stockPrice,
+        mode: "BUY",
+      },
+      {
+        withCredentials: true,
+      },
+    );
 
     closeBuyWindow();
   };
@@ -81,11 +71,7 @@ const BuyActionWindow = ({ uid }) => {
             Buy
           </Link>
 
-          <Link
-            to=""
-            className="btn btn-grey"
-            onClick={handleCancelClick}
-          >
+          <Link to="" className="btn btn-grey" onClick={handleCancelClick}>
             Cancel
           </Link>
         </div>

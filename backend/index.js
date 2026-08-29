@@ -198,7 +198,6 @@ app.use(cookieParser());
 //   res.send("Done!");
 // });
 
-
 const authenticateUser = (req, res, next) => {
   try {
     const token = req.cookies.token;
@@ -209,15 +208,11 @@ const authenticateUser = (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET
-    );
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     req.user = decoded;
 
     next();
-
   } catch (error) {
     console.log("Authentication error:", error);
 
@@ -227,65 +222,47 @@ const authenticateUser = (req, res, next) => {
   }
 };
 
-
 // app.get("/allHoldings", async (req, res) => {
 //   let allHoldings = await HoldingsModel.find({});
 //   res.json(allHoldings);
 // });
 
+app.get("/allHoldings", authenticateUser, async (req, res) => {
+  try {
+    const allHoldings = await HoldingsModel.find({
+      userId: req.user.userId,
+    });
 
-app.get(
-  "/allHoldings",
-  authenticateUser,
-  async (req, res) => {
-    try {
-      const allHoldings = await HoldingsModel.find({
-        userId: req.user.userId,
-      });
+    res.json(allHoldings);
+  } catch (error) {
+    console.log("Holdings error:", error);
 
-      res.json(allHoldings);
-
-    } catch (error) {
-      console.log("Holdings error:", error);
-
-      res.status(500).json({
-        message: "Error fetching holdings",
-      });
-    }
+    res.status(500).json({
+      message: "Error fetching holdings",
+    });
   }
-);
-
-
+});
 
 // app.get("/allPositions", async (req, res) => {
 //   let allPositions = await PositionsModel.find({});
 //   res.json(allPositions);
 // });
 
+app.get("/allPositions", authenticateUser, async (req, res) => {
+  try {
+    const allPositions = await PositionsModel.find({
+      userId: req.user.userId,
+    });
 
+    res.json(allPositions);
+  } catch (error) {
+    console.log("Positions error:", error);
 
-
-app.get(
-  "/allPositions",
-  authenticateUser,
-  async (req, res) => {
-    try {
-      const allPositions = await PositionsModel.find({
-        userId: req.user.userId,
-      });
-
-      res.json(allPositions);
-
-    } catch (error) {
-      console.log("Positions error:", error);
-
-      res.status(500).json({
-        message: "Error fetching positions",
-      });
-    }
+    res.status(500).json({
+      message: "Error fetching positions",
+    });
   }
-);
-
+});
 
 // app.post("/newOrder", async (req, res) => {
 //   try {
@@ -340,113 +317,79 @@ app.get(
 //   }
 // });
 
-app.post(
-  "/newOrder",
-  authenticateUser,
-  async (req, res) => {
-    try {
+app.post("/newOrder", authenticateUser, async (req, res) => {
+  try {
+    const newOrder = new OrdersModel({
+      userId: req.user.userId,
+      name: req.body.name,
+      qty: req.body.qty,
+      price: req.body.price,
+      mode: req.body.mode,
+    });
 
-      const newOrder = new OrdersModel({
+    await newOrder.save();
+
+    // If order is BUY, add/update holding
+    if (req.body.mode === "BUY") {
+      const existingHolding = await HoldingsModel.findOne({
         userId: req.user.userId,
         name: req.body.name,
-        qty: req.body.qty,
-        price: req.body.price,
-        mode: req.body.mode,
       });
 
-      await newOrder.save();
+      if (existingHolding) {
+        const oldQty = existingHolding.qty;
+        const oldAvg = existingHolding.avg;
 
+        const newQty = Number(req.body.qty);
+        const newPrice = Number(req.body.price);
 
-      // If order is BUY, add/update holding
-      if (req.body.mode === "BUY") {
+        const totalQty = oldQty + newQty;
 
-        const existingHolding =
-          await HoldingsModel.findOne({
-            userId: req.user.userId,
-            name: req.body.name,
-          });
+        const newAvg = (oldQty * oldAvg + newQty * newPrice) / totalQty;
 
+        existingHolding.qty = totalQty;
+        existingHolding.avg = newAvg;
+        existingHolding.price = newPrice;
 
-        if (existingHolding) {
+        await existingHolding.save();
+      } else {
+        const newHolding = new HoldingsModel({
+          userId: req.user.userId,
+          name: req.body.name,
+          qty: Number(req.body.qty),
+          avg: Number(req.body.price),
+          price: Number(req.body.price),
+          net: "0.00%",
+          day: "0.00%",
+        });
 
-          const oldQty = existingHolding.qty;
-          const oldAvg = existingHolding.avg;
-
-          const newQty = Number(req.body.qty);
-          const newPrice = Number(req.body.price);
-
-          const totalQty = oldQty + newQty;
-
-          const newAvg =
-            (oldQty * oldAvg +
-              newQty * newPrice) /
-            totalQty;
-
-
-          existingHolding.qty = totalQty;
-          existingHolding.avg = newAvg;
-          existingHolding.price = newPrice;
-
-          await existingHolding.save();
-
-        } else {
-
-          const newHolding =
-            new HoldingsModel({
-              userId: req.user.userId,
-              name: req.body.name,
-              qty: Number(req.body.qty),
-              avg: Number(req.body.price),
-              price: Number(req.body.price),
-              net: "0.00%",
-              day: "0.00%",
-            });
-
-          await newHolding.save();
-        }
+        await newHolding.save();
       }
-
-
-      res.send("Order saved");
-
-    } catch (error) {
-
-      console.log(error);
-
-      res.status(500).send(
-        "Error saving order"
-      );
     }
+
+    res.send("Order saved");
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).send("Error saving order");
   }
-);
+});
 
+app.get("/allOrders", authenticateUser, async (req, res) => {
+  try {
+    const allOrders = await OrdersModel.find({
+      userId: req.user.userId,
+    });
 
+    res.json(allOrders);
+  } catch (error) {
+    console.log("Orders error:", error);
 
-
-app.get(
-  "/allOrders",
-  authenticateUser,
-  async (req, res) => {
-    try {
-      const allOrders = await OrdersModel.find({
-        userId: req.user.userId,
-      });
-
-      res.json(allOrders);
-    } catch (error) {
-      console.log("Orders error:", error);
-
-      res.status(500).json({
-        message: "Error fetching orders",
-      });
-    }
+    res.status(500).json({
+      message: "Error fetching orders",
+    });
   }
-);
-
-
-
-
-
+});
 
 app.post("/api/auth/signup", async (req, res) => {
   try {
@@ -592,55 +535,6 @@ app.post("/api/auth/login", async (req, res) => {
     });
   }
 });
-
-
-
-
-
-// const authenticateUser = (req, res, next) => {
-//   try {
-
-//     const token = req.cookies.token;
-
-//     if (!token) {
-//       return res.status(401).json({
-//         message: "Not authenticated",
-//       });
-//     }
-
-    
-//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-   
-//     req.user = decoded;
-
-//     next();
-//   } catch (error) {
-//     console.log("Authentication error:", error);
-
-//     return res.status(401).json({
-//       message: "Invalid or expired token",
-//     });
-//   }
-// };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 app.get("/api/auth/me", authenticateUser, async (req, res) => {
   try {
