@@ -29,7 +29,7 @@ function Login() {
       console.log(response.data);
 
       // Login successful
-      window.location.href = "http://localhost:3001";
+      window.location.href = "https://zerodha-dashboard-ox82.onrender.com";
 
     } catch (error) {
       console.log(error);

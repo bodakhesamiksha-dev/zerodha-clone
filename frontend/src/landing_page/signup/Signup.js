@@ -47,7 +47,7 @@ function Signup() {
       setSuccess("Signup successful!");
 
       // Go to dashboard
-      window.location.href = "http://localhost:3001";
+      window.location.href = "https://zerodha-dashboard-ox82.onrender.com";
     } catch (error) {
       console.log(error);
 
