@@ -49,7 +49,7 @@ const ProtectedRoute = ({ children }) => {
   // Not logged in
   if (!authenticated) {
     window.location.href =
-      "http://localhost:3000/login";
+      "https://zerodha-frontend-1nbf.onrender.com/login";
 
     return null;
   }
