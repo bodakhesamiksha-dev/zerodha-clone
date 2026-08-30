@@ -31,7 +31,7 @@ function Signup() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3002/api/auth/signup",
+        "http://https://zerodha-backend-g3ew.onrender.com/api/auth/signup",
         {
           name,
           email,

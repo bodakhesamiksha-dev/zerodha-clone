@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children }) => {
     const checkAuthentication = async () => {
       try {
         await axios.get(
-          "http://localhost:3002/api/auth/me",
+          "http://https://zerodha-backend-g3ew.onrender.com/api/auth/me",
           {
             withCredentials: true,
           }
