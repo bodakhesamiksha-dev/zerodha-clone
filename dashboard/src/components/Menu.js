@@ -45,27 +45,24 @@ const Menu = () => {
   // LOGOUT
   // =========================
 
+ 
   const handleLogout = async () => {
+  try {
+    await axios.post(
+      "https://zerodha-backend-g3ew.onrender.com/api/auth/logout",
+      {},
+      {
+        withCredentials: true,
+      }
+    );
 
-    try {
+    window.location.href =
+      "https://zerodha-frontend-1nbf.onrender.com/login";
 
-      await axios.post(
-        "https://zerodha-backend-g3ew.onrender.com/api/auth/logout",
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-
-      window.location.href =
-        "http://localhost:3000/login";
-
-    } catch (error) {
-
-      console.log("Logout error:", error);
-
-    }
-  };
+  } catch (error) {
+    console.log("Logout error:", error);
+  }
+};
 
 
   // =========================

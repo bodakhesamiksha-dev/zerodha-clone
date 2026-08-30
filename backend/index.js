@@ -41,21 +41,6 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 
-// ================= OLD POSITIONS CODE =================
-
-// app.get("/addPositions", async (req, res) => {
-//   let tempPositions = [
-//     {
-//       product: "CNC",
-//       name: "EVEREADY",
-//       qty: 2,
-//       avg: 316.27,
-//       price: 312.35,
-//       net: "+0.58%",
-//       day: "-1.24%",
-//       isLoss: true,
-//     },
-//     {
 //       product: "CNC",
 //       name: "JUBLFOOD",
 //       qty: 1,
@@ -631,22 +616,18 @@ app.get("/api/auth/me", authenticateUser, async (req, res) => {
 // ================= LOGOUT =================
 
 app.post("/api/auth/logout", (req, res) => {
-
   try {
-
     res.clearCookie("token", {
       httpOnly: true,
       secure: true,
       sameSite: "none",
     });
 
-
     res.status(200).json({
       message: "Logout successful",
     });
 
   } catch (error) {
-
     console.log("Logout error:", error);
 
     res.status(500).json({
