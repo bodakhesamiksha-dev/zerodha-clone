@@ -15,7 +15,7 @@ const BuyActionWindow = ({ uid }) => {
 
   const handleBuyClick = () => {
     axios.post(
-      "http://https://zerodha-backend-g3ew.onrender.com/newOrder",
+      "https://zerodha-backend-g3ew.onrender.com/newOrder",
       {
         name: uid,
         qty: stockQuantity,

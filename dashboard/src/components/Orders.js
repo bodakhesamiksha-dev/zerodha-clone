@@ -10,7 +10,7 @@ const Orders = () => {
     const fetchOrders = async () => {
       try {
         const response = await axios.get(
-          "http://https://zerodha-backend-g3ew.onrender.com/allOrders",
+          "https://zerodha-backend-g3ew.onrender.com/allOrders",
           {
             withCredentials: true,
           }

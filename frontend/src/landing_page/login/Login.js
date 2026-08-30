@@ -16,7 +16,7 @@ function Login() {
 
     try {
       const response = await axios.post(
-        "http://zerodha-backend-g3ew.onrender.com/api/auth/login",
+        "https://zerodha-backend-g3ew.onrender.com/api/auth/login",
         {
           email,
           password,

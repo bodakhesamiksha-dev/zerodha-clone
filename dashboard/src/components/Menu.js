@@ -21,7 +21,7 @@ const Menu = () => {
       try {
 
         const response = await axios.get(
-          "http://https://zerodha-backend-g3ew.onrender.com/api/auth/me",
+          "https://zerodha-backend-g3ew.onrender.com/api/auth/me",
           {
             withCredentials: true,
           }
@@ -50,7 +50,7 @@ const Menu = () => {
     try {
 
       await axios.post(
-        "http://https://zerodha-backend-g3ew.onrender.com/api/auth/logout",
+        "https://zerodha-backend-g3ew.onrender.com/api/auth/logout",
         {},
         {
           withCredentials: true,

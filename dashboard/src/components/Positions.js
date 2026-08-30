@@ -8,7 +8,7 @@ const Positions = () => {
     const [allPositions, setAllPositions] = useState([]);
     useEffect(() =>{
      axios.get(
-  "http://https://zerodha-backend-g3ew.onrender.com/allPositions",
+  "https://zerodha-backend-g3ew.onrender.com/allPositions",
   {
     withCredentials: true,
   }
